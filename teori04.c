@@ -13,15 +13,6 @@ typedef struct
   Node *tail;
 } LinkedList;
 
-void simpulAwal(LinkedList *list, int x)
-{
-  Node *baru;
-  baru = (Node *)malloc(sizeof(Node));
-  baru->data = x;
-  baru->next = NULL;
-  list->head = baru;
-  list->tail = baru;
-}
 void cetak(LinkedList list)
 {
   Node *p = list.head;
@@ -31,6 +22,15 @@ void cetak(LinkedList list)
     p = p->next;
   }
   printf("\n");
+}
+void simpulAwal(LinkedList *list, int x)
+{
+  Node *baru;
+  baru = (Node *)malloc(sizeof(Node));
+  baru->data = x;
+  baru->next = NULL;
+  list->head = baru;
+  list->tail = baru;
 }
 void sisipAwal(LinkedList *list, int x)
 {
@@ -207,9 +207,4 @@ void main()
     fflush(stdin);
     repeat = getchar();
   } while (repeat == 'y');
-
-  // sisipAwal(&list, 100);
-  // sisipAwal(&list, 20);
-  // sisipAkhir(&list, 40);
-  // cetak(list);
 }
