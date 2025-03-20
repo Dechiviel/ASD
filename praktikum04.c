@@ -28,7 +28,7 @@ void sisip(LinkedList *list, int x) {
   {
     Node *before = list->head;
     Node *after = list->head;
-    while(after != NULL && after->data < x && after->next != x) {
+    while(after != NULL && after->data < x && after->data != x) {
       before = after;
       after = after->next;
     }
@@ -36,12 +36,14 @@ void sisip(LinkedList *list, int x) {
       list->tail->next = baru;
       list->tail = baru;
     }
+    else if(after->data == x) {
+      free(baru);
+      printf("\nData Sudah Tersedia\n");
+      return;
+    }
     else if(after == list->head) {
       baru->next = list->head;
       list->head = baru;
-    }
-    else if(after->data == x) {
-      free(baru);
     }
     else {
       before->next = baru;
@@ -51,33 +53,49 @@ void sisip(LinkedList *list, int x) {
 }
 void hapus(LinkedList *list, int x) 
 {
-  Node *node;
+  Node *node, *hapus;
   if (list->head == NULL) return;
   else {
     node = list->head;
+    hapus = node;
   }
-  if (node->data == x) {
-    Node *hapus = node;
+  if (node->data == x && node->next != NULL) {
+    hapus = node;
     list->head = node->next;
     free(hapus);
+    return;
   }
-
-  while(node->next != NULL && node->next->data != x) {
-    node = node->next;
-  }
-  if(node->next == NULL) {
+  else if(node->data == x && node->next == NULL) {
+    free(node);
     list->head = NULL;
     list->tail = NULL;
-    free(node);
+    return;
+  }
+  while(hapus != NULL && hapus->data != x) {
+    node = hapus;
+    hapus = hapus->next;
+  }
+  if(hapus == NULL) {
+    printf("\nNode tidak ditemukan\n");
+    return;
+  }
+  else if(hapus->next == NULL) {
+    list->tail = node;
+    list->tail->next = NULL;
+    free(hapus);
   }
   else {
-    Node *hapus = node->next;
     node->next = hapus->next;
     free(hapus);
   }
 }
 void cetak(LinkedList *list) 
 {
+  puts("");
+  if(list->head == NULL) {
+    printf("LINKED LIST KOSONG\n");
+    return;
+  }
   Node *node = list->head;
   while(node->next != NULL) {
     printf("%d ", node->data);
@@ -99,7 +117,7 @@ void main()
     scanf("%d", &choose);
     switch(choose) {
       case 1:
-        printf("\nMasukkan data: ");
+        printf("Masukkan data: ");
         fflush(stdin);
         scanf("%d", &dt);
         sisip(&list, dt);
@@ -115,7 +133,7 @@ void main()
         break;
     }
     cetak(&list);
-    printf("Ulangi? (y/n): ");
+    printf("\nUlangi? (y/n): ");
     fflush(stdin);
     repeat = getchar();
   }
